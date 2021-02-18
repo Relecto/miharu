@@ -137,10 +137,11 @@ def genre_pick(message):
     user_genres[message.from_user.id] = []
 
   genre_id = genres[message.text]
-
-  user_genres[message.from_user.id].append(genre_id)
+  if genre_id in user_genres[message.from_user.id]:
+    user_genres[message.from_user.id].remove(genre_id)
+  else:
+    user_genres[message.from_user.id].append(genre_id)
   
-
   print(user_genres)
 
 
@@ -154,6 +155,7 @@ def echo_all(message):
 
 
 
+  
   
   
 
