@@ -4,7 +4,10 @@ import json
 import random
 from telebot import types
 
-bot = telebot.TeleBot("1647541743:AAGkzb7zlAlXyv-vEIPv56fmsU7vzJkfiOI", parse_mode=None)
+import os 
+
+# env[ironment]
+bot = telebot.TeleBot(os.getenv("BOT_TOKEN"), parse_mode=None)
 
 answers = {
   "hello": "hi",
