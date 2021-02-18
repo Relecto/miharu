@@ -62,6 +62,7 @@ genres = {
 
 # https://api.jikan.moe/v3/search/anime?genre=4&page=1
 
+
 @bot.message_handler(commands=['start', 'help'])
 def send_welcome(message):
   markup = types.ReplyKeyboardMarkup(row_width=2)
