@@ -39,7 +39,7 @@ def recomendations(message):
   # anime = random.choice(res['results'])
   anime = res
   
-  message_text = f"Title: {anime['russian']}\n"
+  message_text = f"Title: {anime['russian']}\nStatus: {anime['status']}"
 
   bot.reply_to(message, message_text)
   
@@ -47,18 +47,26 @@ def recomendations(message):
 
   image_url = 'https://shikimori.one' + anime['image']['original']
 
-  bot.send_photo(message.from_user.id, image_url)
+  anime_url = 'https://shikimori.one' + anime['url']
+
+  markup = types.InlineKeyboardMarkup(row_width=2)
+  bttn = types.InlineKeyboardButton('follow the shikimori link',url=anime_url )
+  markup.add(bttn)
+
+  bot.send_photo(message.from_user.id, image_url,reply_markup=markup)
 
 GENRE_ADDED = '✅'
 GENRE_NOT_ADDED = '❌'
 
 @bot.message_handler(commands=['genre'])
 def genre(message):
-  markup = types.ReplyKeyboardMarkup(row_width=2)
+  markup = types.ReplyKeyboardMarkup(row_width=2,resize_keyboard=True)
 
   user_genres = database.get_genres(message.from_user.id) # []
   
-  for key in shikimori.genres:
+  buttons = []
+
+  for key in sorted(shikimori.genres):
     text = key
     if shikimori.genres[key] in user_genres:
       text = GENRE_ADDED + text
@@ -66,10 +74,13 @@ def genre(message):
       text = GENRE_NOT_ADDED + text
 
     bttn = types.KeyboardButton(text)
-    markup.add(bttn)
-
+    buttons.append(bttn)
+    
   logging.info("genre %s",message.from_user.id)
-  
+  # buttons = [btn, btn, ...]
+  # markup.add(btn, btn, btn)
+  markup.add(*buttons)
+
   bot.reply_to(message, "Choose genre:", reply_markup=markup)
 
 # user_genres = {}
