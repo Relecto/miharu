@@ -7,6 +7,9 @@ import os
 import shikimori
 import database
 import logging
+from helper import escape
+
+
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s - %(message)s")
 
@@ -34,14 +37,13 @@ def send_welcome(message):
 @bot.message_handler(commands=['anime'])
 def recomendations(message): 
   genres = database.get_genres(message.from_user.id)
-  res = shikimori.search(genres)
+  res = shikimori.search(genres) 
   
-  # anime = random.choice(res['results'])
-  anime = res
+  anime = shikimori.get_anime(res['id'])
   
-  message_text = f"Title: {anime['russian']}\nStatus: {anime['status']}"
+  message_text = format_message(anime)
 
-  bot.reply_to(message, message_text)
+  bot.reply_to(message, message_text,parse_mode="MarkdownV2")
   
   logging.info("recomendations %s %s", anime['name'], message.from_user.id)
 
@@ -54,6 +56,20 @@ def recomendations(message):
   markup.add(bttn)
 
   bot.send_photo(message.from_user.id, image_url,reply_markup=markup)
+
+
+def format_message(anime):
+  message_text = ""
+  message_text += f"*Title: {escape(anime['russian'])}*\n"
+  message_text += f"Description: {escape(anime['description'])}\n"
+
+  names = [ genre['russian'] for genre in anime['genres'] ] # ['kkk', 'kkk', 'kkk']
+  genres = ", ".join(names)
+  
+  message_text += f"Genres: {genres}\n"
+  return message_text
+
+
 
 GENRE_ADDED = '✅'
 GENRE_NOT_ADDED = '❌'

@@ -36,6 +36,12 @@ def genre():
 
   return dictionary
 
+
+def get_anime(id): 
+  answer = requests.get('https://shikimori.one/api/animes/'+str(id), headers=headers)
+  res = json.loads(answer.text)
+  return res
+
 genres = {
   'Драма': 8, 
   'Игры': 11, 
@@ -78,3 +84,5 @@ genres = {
   'Безумие': 5, 
   'Сейнен': 42
 }
+
+
