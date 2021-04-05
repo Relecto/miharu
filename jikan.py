@@ -56,7 +56,6 @@ def search(genres):
   
   answer = requests.get('https://api.jikan.moe/v3/search/anime', params={
     'genre': genres,
-    # 'genre_exclude':1,
     'order_by': 'start_date',
     'page':page_number,
   })
@@ -66,7 +65,6 @@ def search(genres):
 
     answer = requests.get('https://api.jikan.moe/v3/search/anime', params={
       'genre': genres,
-      # 'genre_exclude':1,
       'order_by': 'start_date',
       'page':page_number,
     })
